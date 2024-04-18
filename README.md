@@ -1,12 +1,5 @@
 # Cloudera DataFlow (CDF) Hands-on Lab
 
-
----
-
-## Introduction
-
-@TODO
-
 ---
 
 ## Data Distribution with Cloudera DataFlow
@@ -97,9 +90,7 @@ The following is a step by step guide in building a data flow for use within CDF
     <img src="images/3_cdf_menu.png" alt="image" style="width:200px;height:auto;">
 
 
-2. To create a new flow draft click on the **Create Draft** button in the top right corner (
-<img src="images/3_cdf_create_draft.png" alt="image" style="width:auto;height:30px;">
-) and name it **\<userid>-syslog-kafka-flow**
+2. To create a new flow draft click on the **Create Draft** button in the top right corner (<img src="images/3_cdf_create_draft.png" alt="image" style="width:auto;height:30px;">) and name it **\<userid>-syslog-kafka-flow**
 
     <img src="images/3_1_create_flow.png" alt="image" style="width:500px;height:auto;">
 

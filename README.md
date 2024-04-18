@@ -112,13 +112,13 @@ This default context is automatically bound to each Process Group you create wit
 
     | Name  | Description | Value |
     | ----------------- | ------------- | ------------- |
-    | CDP Workload User	| CDP Workload User | \<Your own workload user name>|
-    | Filter Rule | Filter Rule | SELECT * FROM FLOWFILE|
+    | CDP Workload User	| CDP Workload User | **\<Your own workload user name>**|
+    | Filter Rule | Filter Rule | **SELECT * FROM FLOWFILE**|
     | Kafka Broker Endpoint| Comma-separated list of Kafka broker addresses	| **\<Comma-separated list of Kafka broker addresses. See notes below>**|
-    | Kafka Destination Avro Topic |Target Kafka topic name for AVRO messages| \<userid>-syslog-avro|
-    | Kafka Destination JSON Topic |Target Kafka topic name for JSON messages| \<userid>-syslog-json|
-    | Kafka Producer ID |Client ID of Kafka producer| \<userid>-producer|
-    | Schema Name |Schema name for AVRO Kafka topic| \<userid>-syslog-avro|
+    | Kafka Destination Avro Topic |Target Kafka topic name for AVRO messages| **\<userid>-syslog-avro**|
+    | Kafka Destination JSON Topic |Target Kafka topic name for JSON messages| **\<userid>-syslog-json**|
+    | Kafka Producer ID |Client ID of Kafka producer| **\<userid>-producer**|
+    | Schema Name |Schema name for AVRO Kafka topic| **\<userid>-syslog-avro**|
     | Schema Registry Hostname |Hostname of Cloudera Schema Registry| **\<Hostname of Schema Registry service. See notes below>**|
 
 
@@ -127,7 +127,7 @@ This default context is automatically bound to each Process Group you create wit
 
     * **Kafka Broker Endpoints:** 
     
-        You can be found the endpoints for your **Kafka Brokers** in the **Endpoints** view of your Streams Messaging (Kafka) DataHub cluster.
+        You can find the endpoints of your **Kafka Brokers** in the **Endpoints** view of your Streams Messaging (Kafka) DataHub cluster.
 
         <img src="images/3_2_kafka_broker_endpoints.png" alt="image" style="width:1000px;height:auto;">
 
@@ -141,7 +141,7 @@ This default context is automatically bound to each Process Group you create wit
 
      * **Schema Registry Hostname:**
     
-        You can be found the endpoint for your **Schema Registry Hostname** in the **Nodes** view of your Streams Messaging (Kafka) DataHub cluster.  
+        You can find the hostname to use as your **Schema Registry Hostname** in the **Nodes** view of your Streams Messaging (Kafka) DataHub cluster.  
 
         <img src="images/3_2_sr_masternode.png" alt="image" style="width:1000px;height:auto;">
 
@@ -153,13 +153,13 @@ This default context is automatically bound to each Process Group you create wit
 
     | Name  | Description | Value |
     | ----------------- | ------------- | ------------- |
-    | CDP Workload User Password | CDP Workload User Password | \<Your own workload password for the environment>|
+    | CDP Workload User Password | CDP Workload User Password | **\<Your own workload password for the environment>**|
 
 4. Once all the parameters have been created verify with the list below
 
-    <img src="images/3_2_flow_parameters.png" alt="image" style="width:600px;height:auto;">
+    <img src="images/3_2_flow_parameters.png" alt="image" style="width:800px;height:auto;">
 
-5. Click **Apply Changes** and then Back To Flow Designer to go back to the Flow Designer main page.
+5. Click **Apply Changes** and then **Back To Flow Designer** to go back to the Flow Designer main page.
 
 ### 3.3 Create Controller Services
 
@@ -167,20 +167,20 @@ This default context is automatically bound to each Process Group you create wit
 
 1. Enable the Test Session before configuring the services.
 
-    * Select Flow Options > Test Session. Use the latest NiFi version (default).
-    * Click Start Test Session. Test session status changes to Initializing Test Session… 
+    * Select **Flow Options > Test Session**. Use the latest NiFi version (default).
+    * Click the **Start** button to start a test session. The test session status changes to **Initializing Test Session**. 
     * Wait for the status to change to Active Test Session.
 
     <img src="images/3_2_test_session.png" alt="image" style="width:500px;height:auto;">
 
-    You are not yet at the point of testing the flow, but enabling a test session forces the Default Nifi SSL Context Service controller service to be created, which you will need in the next steps.
+    You are not yet at the point of testing the flow, but enabling a test session forces the **Default Nifi SSL Context Service** controller service to be created, which you will need in the next steps.
 
     <img src="images/3_3_cs_ssl.png" alt="image" style="width:800px;height:auto;">
 
 
 
 
-2. Click Flow Options > Services
+2. Click **Flow Options > Services**
 
     **Note**: Make sure you have a test session running to run your flow. 
 
@@ -197,7 +197,7 @@ This default context is automatically bound to each Process Group you create wit
 ---
 &nbsp;
 
-3. Add a new HortonworksSchemaRegistry controller service
+3. Add a new **HortonworksSchemaRegistry** controller service
 
     * Click Add Service. The Add Service page opens.
 
@@ -268,15 +268,15 @@ This default context is automatically bound to each Process Group you create wit
 
 8. This completes the configurations of all the controller services. Please verify with the list below and make sure that all controller services are **enabled**
 
-    <img src="images/3_3_cs_list_all.png" alt="image" style="width:600px;height:auto;">
+    <img src="images/3_3_cs_list_all.png" alt="image" style="width:1000px;height:auto;">
 
-9.	Click on the Back to Flow Designer link to go back to the flow canvas
+9.	Click on the **Back to Flow Designer** link to go back to the flow canvas
 
 &nbsp;
 
 ### 3.4 Design the flow
 
-1.	Open the Flow Design page
+1.	Open the **Flow Design** page
 2.	Create the **Generate Syslog RFC5424** processor
 
     1. Click on the **Processor** icon and drag it onto the canvas
@@ -352,7 +352,7 @@ This default context is automatically bound to each Process Group you create wit
         ```
         
 
-    4. Relationships: check Terminate for the failure relationship
+    4. **Relationships**: check **Terminate** for the **failure** relationship
 
         <img src="images/3_4_executescript_relationship.png" alt="image" style="width:600px;height:auto;">
 
@@ -516,13 +516,13 @@ Tip: You can check the status of your Test Session in the upper right corner of 
 
     Stopped processors are identified by the icon <img src="images/4_processor_stopped.png" alt="image" style="width:20px;height:auto;">. Right-click on a stopped processor and select **Start** to start it.
 
-    The flow starts executing. On the Flow Design Canvas you can observe statistics on your processors change as they consume data and execute their respective tasks. 
+    The flow starts executing. On the **Flow Design** canvas you can observe statistics on your processors change as they consume data and execute their respective tasks. 
 
     <img src="images/4_flow_processors_running.png" alt="image" style="width:800px;height:auto;">
 
     You should see the flow running successfully and writing records to Kafka.
 
-6.	Access the SMM UI from the Streams Messaging DataHub page and check the topic metrics and data:
+6.	Access the SMM UI from the **Streams Messaging DataHub** page and check the topic metrics and data:
 
     <img src="images/4_smm_topics.png" alt="image" style="width:1000px;height:auto;">
 
@@ -546,7 +546,7 @@ Tip: You can check the status of your Test Session in the upper right corner of 
 
 ## 5. Version Control the flow into the DataFlow Catalog 
 
-When your flow draft has been tested and is ready to be used you can publish it to the DataFlow Catalog so that you can deploy it from there.
+When your flow draft has been tested and is ready to be used you can publish it to the **DataFlow Catalog** so that you can deploy it from there.
 
 On the first time a flow draft is exported to the catalog you are asked to provide a name for the flow. This name must be unique and must not already exist in the catalog. After a flow is published, subsequent changes that are published will be saved in the catalog as new versions using the same name provided the first time. This name cannot be changed.
 

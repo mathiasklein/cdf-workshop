@@ -231,7 +231,7 @@ This default context is automatically bound to each Process Group you create wit
 5.	Add a new **JsonTreeReader controller service** with the service name **WS_JSON_Syslog_Reader** and add the following properties. Then click **Apply** and activate the service by clicking on the "Enable Icon".
 
 
-    | **Property**  | **Valu** |
+    | **Property**  | **Value** |
     | ----------------- | ------------- | 
     | Schema Access Strategy | **Use ‘Schema Name’ Property** |
     | Schema Registry | **WS_CDP_Schema_Registry** |
@@ -570,7 +570,7 @@ OR
 1.	Choose one of the methods explained above and publish your flow.
 2.	In the Publish Flow dialog box, enter the following details:
     1. Flow Name: only when you publish your flow for the first time.
-    2. Flow Description: only when you publish your flow for the first time.
+    2. Flow Description: only when you publish your flow for the first time e.g. "Flow generates syslog messages and writes them to Kafka"
     3. Version Comments: every time a flow version is published.
 
     <img src="images/5_publish_flow_dialog.png" alt="image" style="width:600px;height:auto;">
@@ -603,7 +603,9 @@ OR
 
     <img src="images/6_flow_deployment_name.png" alt="image" style="width:800px;height:auto;">
 
-6. In the **NiFi Configuration** page, accept all the defaults (runtime version, autostart behavior, inbound connections and custom NAR) and click **Next**.
+6. In the **NiFi Configuration** page, accept all the defaults (no need to change runtime version, autostart behavior, inbound connections and custom NAR) and click **Next**.
+
+    <img src="images/6_flow_deployment_nifi_config.png" alt="image" style="width:800px;height:auto;">
 
 7. In the **Parameters** page, provide the correct values for the parameter for the production run and then click **Next**. Most of the parameters already have good defaults and you only need to change them if needed. However, you must re-enter the **CDP Workload User Password**.
 
@@ -649,7 +651,7 @@ OR
         | **Property**  | **Value** |
         | ----------------- | ------------- | 
         | KPI Scope | **Connection** |
-        | Connection Name | **filtered_event_WriteToKafka** |
+        | Connection Name | **filtered_event_WriteToKafka_AVRO** |
         | Metrics to Track | **Bytes Queued** |
         | Trigger alert when metric is greater than (enable checkbox) | **10 KBytes**  |
         | Alert will be triggered when metrics is outside the boundary(s) for | **30 seconds** |
@@ -694,8 +696,9 @@ In this module you will practice the streaming analytic capabilities of Cloudera
 
     <img src="images/ssb_1_link.png" alt="image" style="width:10000px;height:auto;">
 
-* Open the **ssb_default** project
+* Open the default project for your current user e.g. **\<userid>_default** 
 
+    <img src="images/ssb_1_open_user_project.png" alt="image" style="width:10000px;height:auto;">
 
 ### 2. Register a Kafka Data Source
 
@@ -735,8 +738,8 @@ Schema Registry stores schemas that are used to read/write data from/to Kafka to
 
 | **Property**  | **Value** |
 | ----------------- | ------------- | 
-| Name | **\<name of the catalog. E.g. dh-schreg>** |
 | Catalog Type | **Schema Registry** |
+| Name | **\<name of the catalog. E.g. dh-schreg>** |
 | Kafka Cluster | **\<select the Kafka data source you created the previous section>** |
 | Enable TLS | **Enabled** |
 | Schema Registry URL | **https://<schreg_hostname>:7790/api/v1 (See the Notes under section "3.2 Configure parameters for the flow" for more details on how to find the Kafka broker addresses)** |
@@ -783,7 +786,7 @@ This will make the **syslog_severity** table, which has already been created in 
 
     The full masters address to be provided during the catalog registration is the following:
 
-    <img src="images/ssb_4_kudu_masters.png" alt="image" style="width:800px;height:auto;">
+    <img src="images/ssb_4_kudu_masters.png" alt="image" style="width:1000px;height:auto;">
 
     &nbsp;
 
@@ -818,6 +821,8 @@ Sometimes, though, you don't have a schema for a particular topic and you may st
     | Kafka Cluster | **\<select the Kafka data source you created previously>** |
     | Data Format | **JSON** |
     | Topic Name | **\<userid>-syslog-json** |
+
+    <img src="images/ssb_5_virtualtable_kafka_config.png" alt="image" style="width:600px;height:auto;">
 
 4.	When you select Data Format as AVRO, you must provide the correct Schema Definition when creating the table for SSB to be able to successfully process the topic data.
 
@@ -869,6 +874,10 @@ Before running jobs in SSB you must unlock your keytab following the steps below
 3.	Enter your username and password and click on Unlock Keytab
 
     <img src="images/ssb_6_unlock_keytab.png" alt="image" style="width:600px;height:auto;">
+
+4. You will see the following screen once your keytab was unlocked successfully
+
+    <img src="images/ssb_6_unlock_keytab_success.png" alt="image" style="width:600px;height:auto;">
 
 ### 9. Create Streaming SQL jobs
 
@@ -972,7 +981,7 @@ One powerful feature of Flink and SSB is the ability to perform windowing aggreg
 
 In this section you will write a query that defines a sliding (HOP) window on the syslog stream to count how many events of each severity are being generated in intervals of 30 seconds. The 30-second window slides forward every 5 seconds, so the query produces results every 5 seconds for the previous window that ended at that point in time.
 
-1.	On the Explorer view, right-click on the Jobs item and select New Job to create a new job. Call it job3.
+1.	On the Explorer view, right-click on the Jobs item and select New Job to create a new job. Call it **\<userid>_job3**.
 
 2.	Enter the following query in the SQL editor (You might have to adjust the table name):
 
@@ -1018,7 +1027,7 @@ This opens a number of possibilities like using data-at-rest tables to enrich st
     count(*) as severity_count
     FROM
     TABLE(
-        HOP(TABLE syslog_data,
+        HOP(TABLE [userid_syslog_data],
             DESCRIPTOR(event_time),
             INTERVAL '5' SECOND,
             INTERVAL '30' SECOND)) a
@@ -1042,6 +1051,9 @@ So far, the results of all the jobs that you created were displayed on the scree
 SSB makes it really easy to write data to different locations. All you have to do is to create a Virtual Table mapped to that location and then INSERT into that table the results of the query that you are running. You will practice this in this section by modifying job 4 to send its results to a Kafka topic.
 
 You will start by creating a topic to store the results of your query and then modify job4 so that it sends its aggregated and enriched stream output to that topic.
+
+
+**NOTE: The Kafka topic gets auto-created, so step 1 - 3 are optional**
 
 1.	Open the SMM UI (link is on the Streams Messaging DataHub page)
 2.	Click on the **Topics** icon in the left menu ( <img src="images/ssb_9_smm_topics_icon.png" alt="image" style="width:20px;height:auto;"> ) and then on the **Add New** button to create a new topic
@@ -1080,7 +1092,13 @@ You will start by creating a topic to store the results of your query and then m
         , PRIMARY KEY (window_start, window_end, severity) NOT ENFORCED
         ```
     
-    3.	Properties: replace all the properties in the WITH clause with the following:
+    3.	Remove the line for **bootstrap.servers**
+    
+        ```
+        'properties.bootstrap.servers' = '...',
+         ```
+
+    4. Properties: replace all the properties in the WITH clause with the following:
         
         ```
         'connector' = 'upsert-kafka: <data_source_name>',
@@ -1088,7 +1106,8 @@ You will start by creating a topic to store the results of your query and then m
         'key.format' = 'json',
         'value.format' = 'json'
         ```
-    4.	topic: **<userid>-severity-counts**
+
+    5.	topic: **\<userid>-severity-counts**
 
     There are other optional properties commented out in the template that you can ignore. The completed template should look like the one below:
     
@@ -1100,7 +1119,7 @@ You will start by creating a topic to store the results of your query and then m
 
     After the CREATE TABLE execution you can see the created table in the Explorer tree:
     
-    <img src="images/ssb_9_create_table_virtual_tables.png" alt="image" style="width:800px;height:auto;">
+    <img src="images/ssb_9_create_table_virtual_tables.png" alt="image" style="width:600px;height:auto;">
 
 8.	Once the table is created successfully, delete the CREATE TABLE statement from the SQL editor.
     
@@ -1120,7 +1139,7 @@ You will start by creating a topic to store the results of your query and then m
 
     <img src="images/ssb_9_job5_output.png" alt="image" style="width:800px;height:auto;">
 
-12.	Open the SMM UI again, click on the Topics icon (<img src="images/ssb_9_smm_topic_magnifying_glass.png" alt="image" style="width:30px;height:auto;">) and search for the <userid>-severity-counts topic.
+12.	Open the SMM UI again, click on the Topics icon (<img src="images/ssb_9_smm_topic_magnifying_glass.png" alt="image" style="width:30px;height:auto;">) and search for the **\<userid>-severity-counts** topic.
 
     <img src="images/ssb_9_job5_smm_topics.png" alt="image" style="width:800px;height:auto;">
 
